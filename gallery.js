@@ -10,8 +10,11 @@ const refs = {
   ),
 };
 
+const imgLinksArray = [];
+
 function createGalleryMarkup(items) {
-    return items.map(({ preview, original, description }) => {
+  return items.map(({ preview, original, description }) => {
+      imgLinksArray.push(original);
         return `
         <li class="gallery__item">
           <a
@@ -39,6 +42,7 @@ function onImageClick(e) {
   if (!e.target.classList.contains('gallery__image')) {
         return;
   }
+
   window.addEventListener('keydown', onEscClose);
   refs.lightboxImg.src = e.target.dataset.source;
   refs.lightboxImg.alt = e.target.alt;
@@ -59,8 +63,20 @@ function closeLightboxBtn() {
 }
 
 function onEscClose(e) {
+
     if (e.code === 'Escape') {
         closeLightboxBtn();
   }
+
+   const linkNumberOfArray = imgLinksArray.indexOf(refs.lightboxImg.getAttribute('src'));
+
+  if (e.code === 'ArrowRight' && (linkNumberOfArray + 1) < imgLinksArray.length) {
+    refs.lightboxImg.setAttribute('src', imgLinksArray[linkNumberOfArray + 1]);
+  };
+
+  if (e.code === 'ArrowLeft' && linkNumberOfArray !== 0) {
+  refs.lightboxImg.setAttribute('src', imgLinksArray[linkNumberOfArray - 1])
+  };
 }
+
 
