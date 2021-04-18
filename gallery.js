@@ -35,43 +35,32 @@ refs.galleryList.insertAdjacentHTML('beforeend', galleryMarkup);
 
 refs.galleryList.addEventListener('click', onImageClick);
 function onImageClick(e) {
-    e.preventDefault();
-  if (!e.target.nodeName === "IMG") {
+  e.preventDefault();
+  if (!e.target.classList.contains('gallery__image')) {
         return;
   }
-  
-   refs.lightboxImg.src = e.target.dataset.source;
-    refs.lightboxImg.alt = e.target.alt;
-
-    refs.lightbox.classList.add("is-open");
+  window.addEventListener('keydown', onEscClose);
+  refs.lightboxImg.src = e.target.dataset.source;
+  refs.lightboxImg.alt = e.target.alt;
+  refs.lightbox.classList.add("is-open");
 }
 
 refs.lightbox.addEventListener('click', closeLightboxBtn);
 function closeLightboxBtn() {
-    if (!refs.lightboxCloseBtn) {
+    if (!refs.lightboxCloseBtn || !refs.lightboxOverlay) {
         return;
     }
     
+    window.removeEventListener('keydown', onEscClose);
     refs.lightboxImg.src = "";
     refs.lightboxImg.alt = "";
 
     refs.lightbox.classList.remove("is-open");
 }
 
-refs.lightboxOverlay.addEventListener('click', onOverlayClick);
-function onOverlayClick(e) {
-    e.preventDefault();
-    if (!refs.lightboxOverlay) {
-        return;
-    }
-    
-    closeLightboxBtn();
-}
-
-window.addEventListener('keydown', onEscClose);
 function onEscClose(e) {
     if (e.code === 'Escape') {
         closeLightboxBtn();
-    }
+  }
 }
 
